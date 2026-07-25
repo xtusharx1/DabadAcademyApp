@@ -1,0 +1,76 @@
+{
+  "project_info": {
+    "project_number": "437010329191",
+    "project_id": "defence-boarding-schools",
+    "storage_bucket": "defence-boarding-schools.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:437010329191:android:0ef8baeea0f079f8002ec2",
+        "android_client_info": {
+          "package_name": "com.app.sainikschoolcadet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "437010329191-2rgo6ui8m4qtdkhkd69br88gbot9abo5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.sainikschoolcadet",
+            "certificate_hash": "da539588dc89396b78c58af9930c43a16dbd7b1d"
+          }
+        },
+        {
+          "client_id": "437010329191-99hadu0s0gd15m9sqm6mmgcld5hpe8lr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxcxnj0gAQvOZ6NIgBcB3bP2BWl8tYAP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "437010329191-99hadu0s0gd15m9sqm6mmgcld5hpe8lr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:437010329191:android:3b6b7e1d522729d4002ec2",
+        "android_client_info": {
+          "package_name": "com.dabad.dabadacademy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "437010329191-99hadu0s0gd15m9sqm6mmgcld5hpe8lr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxcxnj0gAQvOZ6NIgBcB3bP2BWl8tYAP0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "437010329191-99hadu0s0gd15m9sqm6mmgcld5hpe8lr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

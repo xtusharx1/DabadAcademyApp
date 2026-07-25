@@ -1,0 +1,26 @@
+dev_dependencies:
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/icon.jpeg"
+  min_sdk_android: 21  # Sets the minimum SDK version for Android
+  adaptive_icon_background: "#ffffff"  # Sets the background color for adaptive icon
+  adaptive_icon_foreground: "assets/icon.jpeg"  # Sets the foreground image for the adaptive icon
+
+  web:
+    generate: true
+    image_path: "assets/icon.jpeg"
+    background_color: "#ffffff"  # Set a background color for the web icon
+    theme_color: "#ffffff"  # Set a theme color for the web icon
+
+  windows:
+    generate: true
+    image_path: "assets/icon.jpeg"
+    icon_size: 48  # Min: 48, Max: 256, Default: 48
+
+  macos:
+    generate: true
+    image_path: "assets/icon.jpeg"

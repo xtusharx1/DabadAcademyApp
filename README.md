@@ -44,7 +44,15 @@ cd DabadAcademyApp
 flutter pub get
 ```
 
-### 3. Run the App
+### 3. Configure Environment Constants
+
+Copy the sample configuration template and set your API base URL:
+
+```bash
+cp lib/constants.dart.example lib/constants.dart
+```
+
+### 4. Run the App
 
 Execute the following command to start the application in debug mode:
 
@@ -57,6 +65,7 @@ To run on a specific target device:
 ```bash
 flutter run -d <device-id>
 ```
+
 
 ## Build Commands
 
@@ -99,8 +108,9 @@ Below is a brief overview of the project structure:
 │   ├── Models/               # Data models and serialisation logic
 │   ├── Screens/              # App screens (Home, Attendance, Notice, Profile, etc.)
 │   ├── FCM.dart              # Firebase Cloud Messaging integration setup
-│   ├── constants.dart        # Application-wide constants and styling configurations
+│   ├── constants.dart.example# Sample environment constants & styling configurations template
 │   ├── firebase_options.dart # Firebase environment credentials and setup
+
 │   └── main.dart             # Application entry point
 ├── pubspec.yaml              # Package dependencies and asset configurations
 └── README.md                 # Project documentation

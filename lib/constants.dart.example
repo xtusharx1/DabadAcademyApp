@@ -1,0 +1,16 @@
+// Sample configuration constants.
+// Copy this file to lib/constants.dart and update environment configuration.
+import 'package:flutter/material.dart';
+
+const String BASE_URL = 'YOUR_API_BASE_URL_HERE';
+
+class AppColors {
+  static const Color primary = Color(0xFF7A57D1);
+  static const Color contentColorBlue = Color(0xFF007AFF);
+  static const Color contentColorPink = Color(0xFFFF2D55);
+  static const Color contentColorRed = Color(0xFFFF3B30);
+  static const Color contentColorGreen = Color(0xFF34C759);
+  static const Color contentColorCyan = Color(0xFF5AC8FA);
+  static const Color mainTextColor1 = Color(0xFF8E8E93);
+  static const Color borderColor = Color(0xFFE5E5EA);
+}

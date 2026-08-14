@@ -47,15 +47,23 @@ FlutterLocalNotificationsPlugin();
 // Global authenticated user ID, populated during splash screen initialization
 int? globalUserId;
 
-void main() {
+void main() async {
   // Ensure Flutter is initialized
   WidgetsFlutterBinding.ensureInitialized();
 
   // Set system UI mode
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
 
-  // Set up background message handler synchronously
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // Initialize Firebase before setting background handler or running app
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    // Set up background message handler
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  } catch (e) {
+    debugPrint('Firebase initialization error in main: $e');
+  }
 
   runApp(const StudentManagementApp());
 }

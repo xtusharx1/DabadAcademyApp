@@ -26,10 +26,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -58,5 +55,14 @@ class DefaultFirebaseOptions {
     messagingSenderId: '437010329191',
     projectId: 'defence-boarding-schools',
     storageBucket: 'defence-boarding-schools.firebasestorage.app',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyB3BRjLE7W14nwyop_pk4CzQoScLOOGSzw',
+    appId: '1:437010329191:ios:8ffac89b7fcaf830002ec2',
+    messagingSenderId: '437010329191',
+    projectId: 'defence-boarding-schools',
+    storageBucket: 'defence-boarding-schools.firebasestorage.app',
+    iosBundleId: 'com.dabad.dabadacademyapp',
   );
 }

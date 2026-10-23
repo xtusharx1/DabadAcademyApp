@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class FCMService {
   // Server API endpoint for token registration using your actual API
-  static const String _baseUrl = 'http://ec2-13-202-53-68.ap-south-1.compute.amazonaws.com:3002/api';
+  static const String _baseUrl = 'https://apistudents.sainikschoolcadet.com/api';
   static const String _registerEndpoint = '$_baseUrl/register-device';
   static const String _unregisterEndpoint = '$_baseUrl/unregister-device';
 

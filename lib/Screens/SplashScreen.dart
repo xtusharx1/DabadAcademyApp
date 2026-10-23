@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../FCM.dart';
 import '../firebase_options.dart';
+import '../constants.dart';
 import '../main.dart';
 import 'HomeScreen.dart';
 import 'SignInScreen.dart';
@@ -128,6 +129,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         SharedPreferences prefs = await SharedPreferences.getInstance().timeout(
           const Duration(seconds: 3),
         );
+        // Sessions saved before the login fallback fix may point to the wrong
+        // account (iOS users were silently logged in as user 146), so force re-login once.
+        if (prefs.getInt('session_version') != kSessionVersion) {
+          await prefs.remove('user_id');
+        }
         userId = prefs.getInt('user_id');
         globalUserId = userId; // Store globally for route builders
       } catch (e) {

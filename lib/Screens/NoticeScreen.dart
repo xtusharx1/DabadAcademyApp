@@ -33,7 +33,7 @@ class _NoticeScreenState extends State<NoticeScreen> {
   Future<void> fetchNotices() async {
     try {
       final response = await http.get(Uri.parse(
-          'http://ec2-13-202-53-68.ap-south-1.compute.amazonaws.com:3002/api/notices/student/${widget.userId}'));
+          'https://apistudents.sainikschoolcadet.com/api/notices/student/${widget.userId}'));
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -60,7 +60,7 @@ class _NoticeScreenState extends State<NoticeScreen> {
   Future<void> fetchBatchInfo() async {
     try {
       final batchResponse = await http.get(Uri.parse(
-          'http://ec2-13-202-53-68.ap-south-1.compute.amazonaws.com:3002/api/studentBatches/students/search/${widget.userId}'));
+          'https://apistudents.sainikschoolcadet.com/api/studentBatches/students/search/${widget.userId}'));
 
       if (batchResponse.statusCode == 200) {
         final batchData = json.decode(batchResponse.body);
@@ -68,7 +68,7 @@ class _NoticeScreenState extends State<NoticeScreen> {
           int batchId = batchData[0]['batch_id'];
 
           final batchDetailsResponse = await http.get(Uri.parse(
-              'http://ec2-13-202-53-68.ap-south-1.compute.amazonaws.com:3002/api/batches/$batchId'));
+              'https://apistudents.sainikschoolcadet.com/api/batches/$batchId'));
 
           if (batchDetailsResponse.statusCode == 200) {
             final batchDetails = json.decode(batchDetailsResponse.body);

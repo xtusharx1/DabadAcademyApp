@@ -37,6 +37,7 @@ class _SignInScreenState extends State<SignInScreen> {
     // Store user information in Shared Preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setInt('user_id', userId);
+    await prefs.setInt('session_version', kSessionVersion);
 
     // Register FCM token with server in background (do not await)
     _fcmService.registerUserToken(userId).catchError((e) {
@@ -68,45 +69,40 @@ class _SignInScreenState extends State<SignInScreen> {
       final String email = _emailController.text.trim();
       final String password = _passwordController.text.trim();
 
-      const String defaultEmail = "dabad";
-      const String defaultPassword = "dabad";
-      const int defaultUserId = 146;
+      // Test/demo credentials sign in through the testsignin API, which
+      // decides on the backend which account to return
+      const String testEmail = "dabad";
+      const String testPassword = "dabad";
+      final bool isTestSignIn =
+          email.toLowerCase() == testEmail && password == testPassword;
+      final String loginPath = isTestSignIn ? 'testsignin' : 'login';
 
-      // Check if the input matches the default credentials (case-insensitive & trimmed)
-      if (email.toLowerCase() == defaultEmail.toLowerCase() &&
-          password.toLowerCase() == defaultPassword.toLowerCase()) {
-        await _proceedWithLogin(defaultUserId);
-      } else {
-        try {
-          final response = await http.post(
-            Uri.parse('$BASE_URL/users/login'),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: jsonEncode(<String, String>{
-              'email': email,
-              'password': password,
-            }),
-          ).timeout(const Duration(seconds: 5));
+      try {
+        final response = await http.post(
+          Uri.parse('$BASE_URL/users/$loginPath'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, String>{
+            'email': email,
+            'password': password,
+          }),
+        ).timeout(const Duration(seconds: 15));
 
-          if (response.statusCode == 200) {
-            final data = jsonDecode(response.body);
+        final data = jsonDecode(response.body);
 
-            if (data['message'] == 'Login successful' && data['user'] != null) {
-              final userId = data['user']['id'];
-              await _proceedWithLogin(userId);
-            } else {
-              // Fallback to default user if response payload indicates failure
-              await _proceedWithLogin(defaultUserId);
-            }
-          } else {
-            // Fallback to default user if server returns non-200 (e.g. 404)
-            await _proceedWithLogin(defaultUserId);
-          }
-        } catch (error) {
-          // Fallback to default user if network or server error occurs
-          await _proceedWithLogin(defaultUserId);
+        if (response.statusCode == 200 &&
+            data['message'] == 'Login successful' &&
+            data['user'] != null) {
+          final userId = data['user']['id'];
+          await _proceedWithLogin(userId);
+        } else {
+          // Never fall back to another account - show the server's reason instead
+          _showError(data['message'] ?? 'Login failed (${response.statusCode})');
         }
+      } catch (error) {
+        debugPrint('Login error: $error');
+        _showError('Unable to reach the server. Please check your internet connection and try again.');
       }
 
       if (mounted) {
@@ -115,6 +111,23 @@ class _SignInScreenState extends State<SignInScreen> {
         });
       }
     }
+  }
+
+  void _showError(String message) {
+    if (!mounted) return;
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Error', style: TextStyle(color: Colors.red)),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text('OK', style: TextStyle(color: Colors.blue)),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -234,6 +247,10 @@ class _SignInScreenState extends State<SignInScreen> {
                                 ),
                                 child: TextFormField(
                                   controller: _emailController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  autocorrect: false,
+                                  enableSuggestions: false,
+                                  textCapitalization: TextCapitalization.none,
                                   autocorrect: false,
                                   enableSuggestions: false,
                                   textCapitalization: TextCapitalization.none,

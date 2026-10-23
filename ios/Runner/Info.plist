@@ -38,8 +38,6 @@
 	<string>This app requires permission to save photos to your photo library.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app requires access to your photo library to select and upload profile pictures and documents.</string>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>This app uses tracking to identify your device for secure user session management and personalized notifications.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

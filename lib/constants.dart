@@ -1,10 +1,9 @@
-// Sample configuration constants.
-// Copy this file to lib/constants.dart and update environment configuration.
+// constant.dart
 import 'package:flutter/material.dart';
-
-const String BASE_URL = 'YOUR_API_BASE_URL_HERE';
+const String BASE_URL = 'https://apistudents.sainikschoolcadet.com/api';
 // Bump to force every installed app to sign in again on next launch
 const int kSessionVersion = 2;
+// Add other constants as needed
 
 class AppColors {
   static const Color primary = Color(0xFF7A57D1);

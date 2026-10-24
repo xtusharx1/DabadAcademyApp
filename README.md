@@ -46,11 +46,7 @@ flutter pub get
 
 ### 3. Configure Environment Constants
 
-Copy the sample configuration template and set your API base URL:
-
-```bash
-cp lib/constants.dart.example lib/constants.dart
-```
+The API base URL and other app-wide constants live in `lib/constants.dart`.
 
 ### 4. Run the App
 
@@ -108,7 +104,7 @@ Below is a brief overview of the project structure:
 │   ├── Models/               # Data models and serialisation logic
 │   ├── Screens/              # App screens (Home, Attendance, Notice, Profile, etc.)
 │   ├── FCM.dart              # Firebase Cloud Messaging integration setup
-│   ├── constants.dart.example# Sample environment constants & styling configurations template
+│   ├── constants.dart        # API base URL, session version & shared colours
 │   ├── firebase_options.dart # Firebase environment credentials and setup
 
 │   └── main.dart             # Application entry point

@@ -474,12 +474,6 @@ class HomeScreen extends StatelessWidget {
     }
   }
 
-  Future<void> _refreshData(BuildContext context) async {
-    // Refresh the page by rebuilding the widget
-    await _fetchUserDetails(userId);
-    return Future.value();
-  }
-
   void _refreshPage(BuildContext context) {
     Navigator.pushReplacement(
       context,

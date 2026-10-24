@@ -251,9 +251,6 @@ class _SignInScreenState extends State<SignInScreen> {
                                   autocorrect: false,
                                   enableSuggestions: false,
                                   textCapitalization: TextCapitalization.none,
-                                  autocorrect: false,
-                                  enableSuggestions: false,
-                                  textCapitalization: TextCapitalization.none,
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: "Username / Email",

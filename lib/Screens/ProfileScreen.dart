@@ -1182,18 +1182,6 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     );
   }
 
-  String _formatDate(String? dateString) {
-    if (dateString == null || dateString.isEmpty || dateString == 'N/A') {
-      return 'Not Available';
-    }
-    try {
-      final date = DateTime.parse(dateString);
-      return DateFormat('MMMM dd, yyyy').format(date);
-    } catch (e) {
-      return dateString;
-    }
-  }
-
   String _formatDateShort(String? date) {
     if (date == null || date.isEmpty || date == 'N/A') return 'N/A';
     try {
@@ -2000,30 +1988,6 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
       rethrow;
     }
   }
-  Widget _buildInfoCard(String title, String value) {
-    final val = value.trim();
-    if (val.isEmpty || val.toLowerCase() == 'n/a' || val.toLowerCase() == 'not available') {
-      return SizedBox.shrink();
-    }
-    return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      padding: EdgeInsets.all(16),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.1), spreadRadius: 1, blurRadius: 4, offset: Offset(0, 2))],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title, style: TextStyle(color: Colors.grey[700], fontWeight: FontWeight.w500, fontSize: 14)),
-          SizedBox(height: 6),
-          Text(value, style: TextStyle(fontSize: 16, color: Colors.black87, fontWeight: FontWeight.w600)),
-        ],
-      ),
-    );
-  }
 
   Widget _buildDocumentsSection() {
     return Padding(
@@ -2210,56 +2174,6 @@ class _ProfileScreenState extends State<ProfileScreen> with SingleTickerProvider
     ],
     ),
           ],
-      ),
-    );
-  }
-  Widget _buildReadOnlyInfoCard(String title, String value, {String? subtitle}) {
-    final val = value.trim();
-    if (val.isEmpty || val.toLowerCase() == 'n/a' || val.toLowerCase() == 'not available') {
-      return SizedBox.shrink();
-    }
-    return Container(
-      margin: EdgeInsets.only(bottom: 12),
-      padding: EdgeInsets.all(16),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Colors.grey[100], // Different background to indicate read-only
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 4,
-              offset: Offset(0, 2))
-        ],
-        border: Border.all(color: Colors.grey.withOpacity(0.3), width: 1),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(title, style: TextStyle(color: Colors.grey[700],
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14)),
-              ),
-              Icon(Icons.lock_outline, color: Colors.grey[500], size: 16),
-            ],
-          ),
-          SizedBox(height: 6),
-          Text(value, style: TextStyle(fontSize: 16,
-              color: Colors.black87,
-              fontWeight: FontWeight.w600)),
-          if (subtitle != null) ...[
-            SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: TextStyle(fontSize: 12,
-                  color: Colors.grey[600],
-                  fontStyle: FontStyle.italic),
-            ),
-          ],
-        ],
       ),
     );
   }

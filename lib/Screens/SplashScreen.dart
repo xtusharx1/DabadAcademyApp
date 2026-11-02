@@ -43,9 +43,34 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     super.dispose();
   }
 
+  // The init steps keep running after a timeout has already navigated away,
+  // so only touch state while this screen is still mounted.
+  void _setStatus(String message) {
+    if (mounted) setState(() => _statusMessage = message);
+  }
+
   Future<void> _initializeApp() async {
     int? userId;
     bool isInitializationFailed = false;
+
+    // Restore the session first: it is quick and local, and must not be
+    // skipped when the Firebase steps below run into the global timeout
+    // (that would send a logged-in student back to the login screen).
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance().timeout(
+        const Duration(seconds: 3),
+      );
+      // Sessions saved before the login fallback fix may point to the wrong
+      // account (iOS users were silently logged in as user 146), so force re-login once.
+      if (prefs.getInt('session_version') != kSessionVersion) {
+        await prefs.remove('user_id');
+      }
+      userId = prefs.getInt('user_id');
+      globalUserId = userId; // Store globally for route builders
+    } catch (e) {
+      debugPrint('SharedPreferences session retrieval failed: $e');
+      isInitializationFailed = true;
+    }
 
     // We set a maximum global timeout of 10 seconds. If initialization takes longer,
     // we proceed to the main app anyway so we never hang the app indefinitely.
@@ -57,7 +82,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     final initProcess = Future<String>(() async {
       // 1. Initialize Firebase Core
       try {
-        setState(() => _statusMessage = 'Connecting to Firebase...');
+        _setStatus('Connecting to Firebase...');
         await Firebase.initializeApp(
           options: DefaultFirebaseOptions.currentPlatform,
         ).timeout(const Duration(seconds: 4));
@@ -68,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
       // 2. Request Notification Permissions
       try {
-        setState(() => _statusMessage = 'Requesting permissions...');
+        _setStatus('Requesting permissions...');
         await FirebaseMessaging.instance.requestPermission(
           alert: true,
           badge: true,
@@ -102,7 +127,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
       // 5. Initialize Local Notifications Plugin
       try {
-        setState(() => _statusMessage = 'Setting up local notifications...');
+        _setStatus('Setting up local notifications...');
         await initLocalNotifications().timeout(const Duration(seconds: 2));
       } catch (e) {
         debugPrint('Local notifications initialization failed: $e');
@@ -123,30 +148,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         debugPrint('Message handling setup failed: $e');
       }
 
-      // 8. SharedPreferences (Critical for login state)
-      try {
-        setState(() => _statusMessage = 'Restoring session...');
-        SharedPreferences prefs = await SharedPreferences.getInstance().timeout(
-          const Duration(seconds: 3),
-        );
-        // Sessions saved before the login fallback fix may point to the wrong
-        // account (iOS users were silently logged in as user 146), so force re-login once.
-        if (prefs.getInt('session_version') != kSessionVersion) {
-          await prefs.remove('user_id');
-        }
-        userId = prefs.getInt('user_id');
-        globalUserId = userId; // Store globally for route builders
-      } catch (e) {
-        debugPrint('SharedPreferences session retrieval failed: $e');
-        isInitializationFailed = true;
-      }
-
-      // 9. Subscribe to User Topic (Non-blocking)
-      if (userId != null && userId! > 0) {
+      // 8. Subscribe to User Topic (Non-blocking)
+      if (userId != null && userId > 0) {
         try {
-          setState(() => _statusMessage = 'Subscribing to updates...');
+          _setStatus('Subscribing to updates...');
           final fcmService = FCMService();
-          await fcmService.subscribeToTopic(userId.toString()).timeout(
+          await fcmService.subscribeToTopic('user_$userId').timeout(
             const Duration(seconds: 3),
             onTimeout: () {
               debugPrint('FCM topic subscription timed out');
@@ -161,6 +168,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
     // Race the initialization against the global timeout
     final result = await Future.any([initProcess, globalTimeout]);
+    if (!mounted) return;
 
     if (result == 'timeout' && isInitializationFailed) {
       // If we timed out and core stuff failed, show a retry screen.

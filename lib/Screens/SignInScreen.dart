@@ -89,13 +89,24 @@ class _SignInScreenState extends State<SignInScreen> {
           }),
         ).timeout(const Duration(seconds: 15));
 
-        final data = jsonDecode(response.body);
+        // A proxy or missing route can answer with an HTML error page
+        Map<String, dynamic>? data;
+        try {
+          final decoded = jsonDecode(response.body);
+          if (decoded is Map<String, dynamic>) data = decoded;
+        } on FormatException {
+          data = null;
+        }
 
-        if (response.statusCode == 200 &&
+        if (data == null) {
+          debugPrint('Login: non-JSON response (${response.statusCode}) from $loginPath');
+          _showError('Login service is unavailable right now (error ${response.statusCode}). Please try again later.');
+        } else if (response.statusCode == 200 &&
             data['message'] == 'Login successful' &&
-            data['user'] != null) {
-          final userId = data['user']['id'];
-          await _proceedWithLogin(userId);
+            data['user'] != null &&
+            data['user']['id'] is int &&
+            (data['user']['id'] as int) > 0) {
+          await _proceedWithLogin(data['user']['id'] as int);
         } else {
           // Never fall back to another account - show the server's reason instead
           _showError(data['message'] ?? 'Login failed (${response.statusCode})');

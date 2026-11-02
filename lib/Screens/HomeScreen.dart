@@ -275,8 +275,8 @@ class HomeScreen extends StatelessWidget {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async => false, // Prevent back button dismissing the dialog
+        return PopScope(
+          canPop: false, // Prevent back button dismissing the dialog
           child: Dialog(
             elevation: 0,
             backgroundColor: Colors.transparent,

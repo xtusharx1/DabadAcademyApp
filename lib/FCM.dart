@@ -76,7 +76,7 @@ class FCMService {
 
     // Android initialization settings (uses app icon)
     const AndroidInitializationSettings initializationSettingsAndroid =
-    AndroidInitializationSettings('launcher_icon');
+    AndroidInitializationSettings('@mipmap/launcher_icon');
 
     // iOS initialization settings
     final DarwinInitializationSettings initializationSettingsIOS =
@@ -107,27 +107,11 @@ class FCMService {
 
   // Configure notification handling
   void _setupNotificationHandling() {
-    // Handle foreground messages
+    // Handle foreground messages. The notification itself is displayed by
+    // setupMessageHandling() in main.dart; showing it here as well would post
+    // every foreground message twice.
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       debugPrint('Received foreground message: ${message.notification?.title}');
-
-      // Display notification
-      if (message.notification != null) {
-        _flutterLocalNotificationsPlugin.show(
-          message.hashCode,
-          message.notification?.title,
-          message.notification?.body,
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              _channel.id,
-              _channel.name,
-              channelDescription: _channel.description,
-              icon: '@drawable/ic_notification', // Full reference
-            ),
-          ),
-          payload: message.data.toString(),
-        );
-      }
     });
 
     // Handle background message

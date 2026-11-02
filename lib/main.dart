@@ -69,7 +69,7 @@ void main() async {
 Future<void> initLocalNotifications() async {
   // Android initialization settings
   const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('launcher_icon');
+  AndroidInitializationSettings('@mipmap/launcher_icon');
 
   // iOS initialization settings
   const DarwinInitializationSettings initializationSettingsIOS =
@@ -169,13 +169,19 @@ class StudentManagementApp extends StatelessWidget {
       routes: {
         '/splash': (context) => const SplashScreen(),
         '/signin': (context) => const SignInScreen(),
-        '/home': (context) => HomeScreen(userId: globalUserId ?? 0),
-        '/attendance': (context) => AttendanceScreen(userId: globalUserId ?? 0),
-        '/notice': (context) => NoticeScreen(userId: globalUserId ?? 0),
-        '/profile': (context) => ProfileScreen(userId: globalUserId ?? 0),
-        '/feeStatus': (context) => FeeStatusScreen(userId: globalUserId ?? 0),
-        '/testRecord': (context) => TestResultScreen(userId: globalUserId ?? 0),
+        // Notification taps can open these routes; without a session go to sign in
+        '/home': (context) => _requireUser((id) => HomeScreen(userId: id)),
+        '/attendance': (context) => _requireUser((id) => AttendanceScreen(userId: id)),
+        '/notice': (context) => _requireUser((id) => NoticeScreen(userId: id)),
+        '/profile': (context) => _requireUser((id) => ProfileScreen(userId: id)),
+        '/feeStatus': (context) => _requireUser((id) => FeeStatusScreen(userId: id)),
+        '/testRecord': (context) => _requireUser((id) => TestResultScreen(userId: id)),
       },
     );
   }
+}
+Widget _requireUser(Widget Function(int userId) builder) {
+  final id = globalUserId;
+  if (id == null || id <= 0) return const SignInScreen();
+  return builder(id);
 }
